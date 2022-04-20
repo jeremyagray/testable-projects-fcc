@@ -15,6 +15,7 @@ import createScatterPlotTests from './scatter-plot-tests';
 import createHeatMapTests from './heat-map-tests';
 import createChoroplethTests from './choropleth-tests';
 import createTreeMapTests from './tree-map-tests';
+import createForceDirectedGraphTests from './force-directed-graph-tests';
 
 let projectsPath = `file:///${path
   .resolve('./build/pages/')
@@ -111,5 +112,11 @@ export default {
     URL: projectsPath + '/d3-tree-map/index.html',
     codepen: 'https://codepen.io/freeCodeCamp/pen/KaNGNR',
     test: createTreeMapTests
+  },
+  'force-directed-graph': {
+    name: 'D3: Force Directed Graph',
+    URL: projectsPath + '/d3-force-directed/index.html',
+    codepen: 'https://codepen.io/freeCodeCamp/pen/KaNGNR',
+    test: createForceDirectedGraphTests
   }
 };
