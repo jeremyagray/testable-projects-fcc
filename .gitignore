@@ -55,4 +55,7 @@ config/server.key
 # sass
 .sass-cache/*
 
+# emacs
+*~
+
 .env
