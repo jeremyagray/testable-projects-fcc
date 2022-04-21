@@ -109,7 +109,7 @@ export default function createForceDirectedGraphTests() {
         );
       });
 
-      it(`Each node will have the properties "data-source",
+      it(`Each link will have the properties "data-source",
       "data-target", and "data-links" containing the names of the
       corresponding linked dependencies and the number of links
       between the dependencies.`, function () {
@@ -123,25 +123,49 @@ export default function createForceDirectedGraphTests() {
           `Found ${actualLinks} links out of ${expectedLinks} expected.`
         );
 
-        actualLinks.forEach((node) => {
+        actualLinks.forEach((link) => {
           assert.isNotNull(
-            node.getAttribute('data-source'),
+            link.getAttribute('data-source'),
             'Could not find property "data-source" in link '
           );
           assert.isNotNull(
-            node.getAttribute('data-target'),
+            link.getAttribute('data-target'),
             'Could not find property "data-target" in link '
           );
           assert.isNotNull(
-            node.getAttribute('data-links'),
+            link.getAttribute('data-links'),
             'Could not find property "data-links" in link '
           );
 
-          const links = parseInt(node.getAttribute('data-links'));
+          const links = parseInt(link.getAttribute('data-links'));
           assert.isAtLeast(
             links,
             1,
             `The number of links ${links} should be at least 1 `
+          );
+        });
+      });
+
+      it(`My force directed graph should have <line> elements with a
+      stroke-width that is proportional to the number of links between
+      dependencies.`, function () {
+        const actualLinks = document.querySelectorAll('line.link');
+        const expectedLinks = 873;
+        assert.equal(
+          actualLinks.length,
+          expectedLinks,
+          `Found ${actualLinks} links out of ${expectedLinks} expected.`
+        );
+
+        const ratio = parseInt(actualLinks[0].getAttribute('stroke-width'))
+          / parseInt(actualLinks[0].getAttribute('data-links'));
+
+        actualLinks.forEach((link) => {
+          let actualRatio = parseInt(actualLinks[0].getAttribute('stroke-width')) / parseInt(actualLinks[0].getAttribute('data-links'));
+          assert.equal(
+            actualRatio,
+            ratio,
+            `The stroke-width to data-links ratio was ${actualRatio} but should b3 ${ratio} `
           );
         });
       });
@@ -190,18 +214,21 @@ export default function createForceDirectedGraphTests() {
       //     );
       //   });
 
-      //   it(`The <rect> elements in the legend should use at least 4
-      //   different fill colors`, function () {
-      //     const legendItems = document.querySelectorAll('#legend rect');
+      it(`The <circle> elements in the visualization should use at
+        least 3 different fill colors`, function () {
+          const circles = document.querySelectorAll('circle.node');
 
-      //     assert.isTrue(
-      //       hasUniqueColorsCount(legendItems, 4),
-      //       'There should be four or more fill colors used for the legend '
-      //     );
-      //   });
+          assert.isTrue(
+            hasUniqueColorsCount(circles, 3),
+            'There should be three or more fill colors used for the nodes '
+          );
+        });
     });
 
     // Tooltip tests.
     testToolTip(document.querySelectorAll('circle.node'), 'data-dependency', 'data-dependency');
+    testToolTip(document.querySelectorAll('line.link'), 'data-source', 'data-source');
+    testToolTip(document.querySelectorAll('line.link'), 'data-target', 'data-target');
+    testToolTip(document.querySelectorAll('line.link'), 'data-links', 'data-links');
   });
 }
